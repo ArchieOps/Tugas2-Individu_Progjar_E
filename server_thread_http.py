@@ -8,7 +8,6 @@ from http import HttpServer
 
 httpserver = HttpServer()
 
-
 class ProcessTheClient(threading.Thread):
 	def __init__(self, connection, address):
 		self.connection = connection
@@ -27,12 +26,12 @@ class ProcessTheClient(threading.Thread):
 					rcv=rcv+d
 					if rcv[-2:]=='\r\n':
 						#end of command, proses string
-						logging.warning("data dari client: {}" . format(rcv))
+						# logging.warning("data dari client: {}" . format(rcv))
 						hasil = httpserver.proses(rcv)
 						#hasil akan berupa bytes
 						#untuk bisa ditambahi dengan string, maka string harus di encode
 						hasil=hasil+"\r\n\r\n".encode()
-						logging.warning("balas ke  client: {}" . format(hasil))
+						# logging.warning("balas ke  client: {}" . format(hasil))
 						#hasil sudah dalam bentuk bytes
 						self.connection.sendall(hasil)
 						rcv=""
@@ -57,12 +56,11 @@ class Server(threading.Thread):
 		self.my_socket.listen(1)
 		while True:
 			self.connection, self.client_address = self.my_socket.accept()
-			logging.warning("connection from {}".format(self.client_address))
+			# logging.warning("connection from {}".format(self.client_address))
 
 			clt = ProcessTheClient(self.connection, self.client_address)
 			clt.start()
 			self.the_clients.append(clt)
-
 
 
 def main():
